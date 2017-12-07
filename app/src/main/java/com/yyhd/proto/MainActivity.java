@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         imageView = (ImageView) findViewById(R.id.bitmap);
+        int a = 90;
     }
 
     public void test1(View view){
