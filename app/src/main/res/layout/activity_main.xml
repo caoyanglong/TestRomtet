@@ -1,48 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_main"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.caoyanglong.adarticle.MainActivity"
-    android:orientation="vertical">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tab_layout"
-        >
-        <android.support.v4.view.ViewPager
-            android:id="@+id/main_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-        <LinearLayout
-            android:id="@+id/ad_container"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            />
-    </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:text="show_dialog"
-        android:onClick="showDialog"
-        android:background="#c5c5c5"
-        android:visibility="gone"
-        />
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+    tools:context="com.yyhd.proto.MainActivity"
+    android:orientation="vertical"
+    >
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0000CD"
-        app:tabIndicatorColor="#FFFFFF"
-        app:tabSelectedTextColor="#D9D9D9"
-        app:tabTextColor="#FFFFFF"
-        android:layout_alignParentBottom="true"
+        android:text="test1"
+        android:onClick="test1"
         />
-</RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test2"
+        android:onClick="test2"
+        />
+
+    <ImageView
+        android:id="@+id/bitmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>

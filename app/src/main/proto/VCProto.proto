@@ -1,0 +1,425 @@
+syntax = "proto2";
+package VS;
+option java_package = "com.live.videochat.module.api.protocol";
+option java_outer_classname = "VCProto";
+option optimize_for = LITE_RUNTIME;
+
+//======================================================================================
+// 1.用户信息
+//======================================================================================
+
+//用户身份信息
+message ClientInfo {
+    required string pkgName                     = 1;  // 本体包名：com.lbe.security.xxxx
+    required string versionName                 = 2;  // 本体版本：1.0.1749
+    required int32  versionCode                 = 3;  // 本体版本：1749
+    required string channel                     = 4;  // 本体渠道：A1、A2、A3……
+    required string signatureMD5                = 5;  // 本体签名证书MD5
+    optional string installerPackageName        = 6;  // 安装者包名
+    optional int32  userGroupId                 = 7;  // 用户组
+    optional string channelNetwork              = 8;  // "Facebook"
+    optional string channelCampaign             = 9;  // 用户来源，第二纬度：广告系列
+    optional string channelAdGroup              = 10; // 用户来源，第三纬度：广告分组
+}
+
+//用户身份信息
+message ClientTest {
+    required string pkgName                     = 1;  // 本体包名：com.lbe.security.xxxx
+    required string versionName                 = 2;  // 本体版本：1.0.1749
+    required int32  versionCode                 = 3;  // 本体版本：1749
+    required string channel                     = 4;  // 本体渠道：A1、A2、A3……
+    required string signatureMD5                = 5;  // 本体签名证书MD5
+    optional string installerPackageName        = 6;  // 安装者包名
+    optional int32  userGroupId                 = 7;  // 用户组
+    optional string channelNetwork              = 8;  // "Facebook"
+    optional string channelCampaign             = 9;  // 用户来源，第二纬度：广告系列
+    optional string channelAdGroup              = 10; // 用户来源，第三纬度：广告分组
+}
+
+//设备信息
+message DeviceInfo{
+    required string osName                      = 1;  // ios/android，标示客户端类型:
+    required string deviceCountry               = 2;  // 本机设备：CN、US、CA……
+    required string localLanguage               = 3;  // 本机设备：CN、US、CA……
+    required string networkCountry              = 4;  // 本机设备：CN、US、CA……
+    required string configLanguage              = 5;  // 本机设备：CN、US、CA……
+
+    optional string osVersion                   = 6;  // 9.0/6.0
+    optional string deviceVendor                = 7;  // 本机设备：供应商
+    optional string deviceModel                 = 8;  // 本机设备：型号:iphone 6s/LGE
+    optional string fingerprint                 = 9;  // 本机设备：指纹
+    optional string deviceFamily                = 10;  // ipad
+    optional string carrier                     = 11;  // china mobile
+
+    optional string imei                        = 12;  // sha1(imei)(android必有)
+    optional string androidId                   = 13;  // 本机设备：androidId(没有的androidId时候,hash(imei))(android必有)
+    optional int32 sdkInt                       = 14;  // 本机设备：SDK版本信息(android仅有)
+    optional string gaid                        = 15;
+
+    optional string idfa                        = 16;  // 00000000-0000-0000-0000-000000000000(ios 仅有)
+    optional string idfv                        = 17;  // idfvXXXXXXX(ios 必有)
+
+    required string timezoneId                  = 18;  // 时区id
+    required int32 timezoneOffset               = 19;  // 时区相对GMT偏移值
+}
+
+//======================================================================================
+// 2.基础信息
+//======================================================================================
+// 用户信息 用于校验用户登陆状态
+message UserInfo{
+    required string jid                         = 1;  // 用户jid;
+    required string vcToken                     = 2;  // 登陆后由服务端返回;
+    required int32 role                         = 3;  // 角色,1：主播，2：登录用户，3：游客。
+}
+
+// 账户信息
+message AccountInfo{
+    optional string jid                         = 1;  // 该账户信息对应的jid
+    optional UserAccount userAccount            = 2;  // 普通用户账户
+    optional AnchorAccount anchorAccount        = 3;  // 主播账户
+}
+
+message UserAccount{
+    optional bool isVip                         = 1;  // 是否是vip
+    optional int64 gemsBalance                  = 2;  // 用户拥有的钻石;
+    optional int64 tycoonValue                  = 3;  // 土豪值
+    optional int32 freeMsgsBalance              = 4;  // 普通用户剩余免费消息条数
+    repeated int32 purchasedEmojis              = 5;  // 用户购买的表情包编号集合；
+}
+
+message AnchorAccount{
+    optional int64 charms                       = 1;  // 主播魅力值
+    optional int32 videoChatPrice               = 2;  // 主播视频聊天价格(单位：每分钟金币数)
+    repeated ReceivedGift receivedGifts         = 3;  // 主播收到的礼物列表
+}
+
+message ReceivedGift{
+    required string id                          = 1;  // 礼物编号
+    optional int32 count                        = 2;  // 礼物个数
+}
+
+//======================================================================================
+// 3.用户登录（游客自动注册）
+//======================================================================================
+message LoginRequest{
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required string openId                      = 3;  // Facebook 或者 Google提供的第三方认证凭证（确认）
+    required string token                       = 4;  // facebook/google...用户访问口令
+    required int32 channel                      = 5;  // 登录渠道 1:facebook; 2:google; 3:phone number；4.游客
+}
+
+message LoginResponse{
+    required int32 status                       = 1;  // 状态 1：成功； -1：错误
+    optional UserInfo userInfo                  = 2;  // 用户信息（jid, vcToken, role）
+    optional ComponentInfo componentInfo        = 3;  // xmpp各组件的信息
+}
+
+//======================================================================================
+// 4.检测注册接口
+//======================================================================================
+// 请求
+message CheckRegisterRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required string openId                      = 3;  // Google提供的第三方认证凭证
+    required string token                       = 4;  // google...用户访问口令
+    required int32 channel                      = 5;  // 登录渠道 1:facebook; 2:google; 3:phone number；4.游客
+}
+// 响应
+message CheckRegisterResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+    optional bool hasRegister                   = 2;  // true:已经注册;false:未注册.
+    optional UserInfo userInfo                  = 3;  // 用户信息（jid, vcToken, vChatId）若已经注册，则直接返回该用户的信息．避免再次调用登录接口,若未注册,则返回空.
+    optional ComponentInfo componentInfo        = 4;  // xmpp各组件的信息
+}
+
+//======================================================================================
+// 5.用户登出
+//======================================================================================
+message LogoutRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required UserInfo userInfo                  = 3;  // 用户信息
+    optional string fcmToken                    = 4;  // fcm token.
+}
+
+message LogoutResponse {
+    required int32 status                       = 1;  // 状态 1：成功； -1：错误
+}
+
+//======================================================================================
+// 6.登录后拉取的主要信息
+//======================================================================================
+message MainInfoRequest{
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    optional UserInfo userInfo                  = 3;  // 验证登陆
+}
+
+message MainInfoResponse{
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+
+    optional int32 ttl                          = 2;  // 缓存周期,默认120分钟（单位分钟）
+    optional string clientIp                    = 3;  // 客户端IP
+
+    optional int32 freeMsgs                     = 4;  // 普通用户每日免费消息条数
+    optional int64 serverTime                   = 5;  // 当前服务端时间戳(单位毫秒)(UTC时区)
+    optional string publicKeyMd5                = 6;  // 根据许可密钥生成的md5值，用于校验本地许可密钥是否合法；
+    optional string guideVideoUrl               = 7;  // 新手引导视频地址
+    optional AutoReport autoReport              = 8; // 视频聊天中自动上报用户端视频截图
+    optional AccountInfo accountInfo            = 9;
+
+    repeated IabSku iabSkus                     = 10;  // 应用市场商品信息
+    repeated PropCategory propCategories        = 11;  // 虚拟商品信息
+    repeated MaterialCategory materialCategories = 12; // 素材信息(贴纸,表情)
+}
+
+message AutoReport {
+    required bool enable                        = 1;  // 是否开启，true:开启：false关闭
+    optional int32 quality                      = 2;  // 上传图片的质量（0-100），100为最好的图片质量。
+    optional int32 interval                     = 3;  // 上传时间间隔(单位秒)
+}
+
+// 应用市场商品
+message IabSku {
+    required string sku                         = 1;  // 商品ID;
+    required string type                        = 2;  // 商品类型, inapp:应用内商品，可管理的; subs:订阅类商品;
+    required int32 placement                    = 3;  // 商品展示位：1：钻石市场;2:vip订阅;3:首充奖励商品
+
+    optional bool isActive                      = 4;  // 商品状态, true:上架; false:下架;（控制商品显示）下架的商品不再向用户展示，但必须下发，防止用户之前购买下架商品但由于不可避免的原因未给用户提供对应的服务(如加金币)。
+    optional int32 months                       = 5;  // 可购买的钻石/金币数
+    optional int32 counts                       = 6;  // 可购买的钻石/金币数
+    optional int32 priority                     = 7;  // 商品优先级，0为最低优先级，用于商品排序
+    optional int32 rewardCounts                 = 8;  // 购买该商品奖励的金币数
+    optional int32 rewardVipDays                = 9;  // 首充奖励奖励的vip天数；
+    optional float discount                     = 10;  // 商品折扣;如20%的折扣(0.2)
+}
+
+// 虚拟商品
+message PropCategory {
+    required int32 categoryId                   = 1;    // 编号，从1开始，编号在前则显示在前面；
+    required string categoryName                = 2;    // 分类名称
+    repeated VPBProp vpbProps                   = 3;    // 虚拟商品
+}
+
+// 虚拟商品
+message VPBProp {
+    required string id                          = 1;  // 商品ID;
+    required string type                        = 2;  // 商品类型, vir_inapp:需花费钻石购买的商品，可消耗型; vir_subs:需花费钻石订阅的商品，不可消耗;
+    required int32 gemsPrice                    = 3;  // 购买该商品的价格(单位：钻石数)
+
+    optional int32 tabId                        = 4;  // 标签编号:从1开始，每种类型下又有多个标签；相同的tabId显示在同一个tab下。
+    optional int32 priority                     = 5;  // 商品优先级，0为最低优先级，用于商品排序
+    optional int32 obtainMethod                 = 6;  // 获取方式:0:所有用户都可花费金币使用;1:vip用户才能花费金币使用
+    optional string title                       = 7;  // 商品名称;
+    optional string iconUrl                     = 8;  // 商品缩略图（秀场打赏/提要求等场景）
+    optional string animateUrl                 = 9;  // 商品素材下载地址
+}
+
+// 虚拟商品
+message MaterialCategory {
+    required int32 categoryId                   = 1;    // 编号，从1开始，编号在前则显示在前面；
+    required int32 categoryType                 = 2;    // 类型 0:贴纸；1：表情
+    optional string categoryName                = 3;    // 分类名称
+    optional string categoryIcon                = 4;    // 分类icon地址
+    optional string packageUrl                  = 5;    // 表情包地址
+    optional int32 price                        = 6;    // 表情包价格(单位：金币数)
+    repeated Material materials                 = 7;    // 素材资源
+}
+
+// 贴纸/表情素材
+message Material {
+    required string id                          = 1;    // 素材编号
+    required string thumbUrl                    = 2;    // 缩略图
+    required string downloadUrl                 = 3;    // 下载链接
+    required int32 categoryType                 = 4;    // 类型 0:贴纸；1：表情
+    required int32 priority                     = 5;    // 素材优先级；0为最高优先级，在最前面显示
+
+    optional string name                        = 6;    // 素材名称,表情名称
+    optional int32 tabId                        = 7;    // 标签编号:从1开始，每种类型下又有多个标签；相同的tabId显示在同一个tab下。
+    optional bool isNew                         = 8;    // 是否是新素材
+}
+
+// xmpp服务各组件信息
+message ComponentInfo {
+    required string hubDomain                   = 1;  // 视频组件域名
+    required string pushDomain                  = 2;  // push视频组件域名
+    required string followDomain                = 3;  // 关注组件域名
+    required string reportDomain                = 4;  // 举报视频组件域名
+    required string uploadDomain                = 5;  // 文件上传域名
+    required string helpDomain                  = 6;  // 客服域名
+    required string anchorlistDomain            = 7;  // 主播列表域名
+    required string anchorvideoDomain           = 8;  // 主播视频域名
+
+    optional string centerPubsubDomain          = 9;  // 中心pubsub域名
+    optional string helpNode                    = 10;  // 客户端需要订阅的通知节点,服务端通过该节点向客户端下发官方通知。
+}
+
+//======================================================================================
+// 7.应用市场商品校验
+//======================================================================================
+// 请求
+message IABVerifyRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+    required UserInfo userInfo                  = 3;  // 验证登陆
+
+    required string sku                         = 4;  // 商品编号
+    optional string type                        = 5;  // 商品类型, inapp:应用内商品，可管理的; subs:订阅类商品;当action为应用市场商品校验时必填。
+    required string purchaseToken               = 6;  // 商品购买凭证
+    required int32 action                       = 7;  // 1:应用市场商品校验；2：商品所有者检测；
+}
+// 响应
+message IABVerifyResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+    optional AccountInfo accountInfo            = 2;  // 账户信息；
+    optional int32 ownerType                    = 3;  // 商品的所有者的类型.1：已经使用过，是当前用户；2:已经使用，但不是当前用户；3：无人所有
+}
+
+//======================================================================================
+// 8.账户服务(用户享有的服务，拥有的金币余额)
+//======================================================================================
+// 请求
+message AccountServiceRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+    required UserInfo userInfo                  = 3;  // 验证登陆
+
+    required int32 action                       = 4;  // 1:仅获取账户信息;2:获取目标jid的账户信息;3:获取账户明细
+    repeated string targetJid                   = 5;  // 目标账户的jid；
+}
+
+// 响应
+message AccountServiceResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+    repeated AccountInfo accountInfo            = 2;  // 账户信息（必定返回）
+    repeated AccountDetails accountDetails      = 3;  // 账户明细（日/周/月收入明细）；
+}
+
+// 账户明细(计算频繁，只有当请求时返回)
+message AccountDetails {
+    optional int64 totalIncomes                 = 1;  // 总收入（单位：金币数）
+    optional int32 monthlyIncomes               = 2;  // 月收入（单位：金币数）
+    optional int32 weeklyIncomes                = 3;  // 周收入（单位：金币数）
+    optional int32 dailyIncomes                 = 4;  // 日收入（单位：金币数）
+
+    optional int32 totalTimes                   = 5;  // 总视频聊天时长（单位：分钟）
+    optional int32 monthlyTimes                 = 6;  // 月视频聊天时长（单位：分钟）
+    optional int32 weeklyTimes                  = 7;  // 周视频聊天时长（单位：分钟）
+    optional int32 dailyTimes                   = 8;  // 日视频聊天时长（单位：分钟）
+}
+
+//======================================================================================
+// 9.奖励接口(每日免费消息条数奖励)
+//======================================================================================
+// 请求
+message RewardRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required UserInfo userInfo                  = 3;  // 验证登陆
+    required int32 rewardType                   = 4;  // 1:每日免费消息条数奖励;2:激活首次充值奖励
+}
+
+// 响应
+message RewardResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;2:奖励已经领过了;
+    optional int32 countDown                    = 2;  // 奖励倒计时时间(单位:秒)
+    optional AccountInfo accountInfo            = 3;
+}
+
+//======================================================================================
+// 10.翻译
+//======================================================================================
+// 请求
+message TranslateRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+    required UserInfo userInfo                  = 3;  // 用户信息（jid, vcToken, role）
+
+    required string targetLang                  = 4;  // 目标语言
+    required string sourceText                  = 5;  // 需要翻译的文本
+}
+// 响应
+message TranslateResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+    optional string translatedText              = 2;  // 翻译后的文本
+}
+
+//======================================================================================
+// 11.排行榜
+//======================================================================================
+message RankRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required UserInfo userInfo                  = 3;  // 用户信息（jid, vcToken, role）
+    required int32 rankType                     = 4;  // 排行榜类型:1:Top fans排行榜.2：土豪榜.3：魅力榜.4:最近充值排行榜.
+
+    optional int32 index                        = 5;  // 分页索引，默认为0
+}
+// 响应
+message RankResponse {
+    required int32 status                       = 1;  // 返回状态:1：成功;-1：错误;
+
+    repeated UserVCard topFans                  = 2;  // Top Fans排行榜
+    repeated UserVCard latelyRechargedUsers     = 3;  // 最近充值排行榜
+
+    repeated UserVCard dailyTycoons             = 4;  // 土豪榜：日榜
+    repeated UserVCard weeklyTycoons            = 5;  // 土豪榜：周榜
+
+    repeated AnchorVCard dailyCharms            = 6;  // 主播魅力榜：日榜
+    repeated AnchorVCard weeklyCharms           = 7;  // 主播魅力榜：周榜
+
+    optional int32 index                        = 8;  // 分页索引，默认为0
+}
+
+message UserVCard {
+    required string jid                          = 1;  // 用户jid
+    optional string avatarUrl                    = 2;  // 用户头像
+    optional string nickName                     = 3;  // 用户昵称
+
+    optional bool isVip                          = 4;  // 是否是vip
+    //日榜/周榜数据
+    optional int32 dailyTycoons                  = 5;  // 日土豪值
+    optional int32 weeklyTycoons                 = 6;  // 周土豪值
+    // 最近充值列表数据
+    optional int32 latelyRechargedGems           = 7;  // 最近充值的金币数
+    optional int64 latelyRechargeTime            = 8;  // 充值时间戳(最近付费用户列表按照充值时间排序)(单位:秒)
+}
+
+message AnchorVCard {
+    required string jid                          = 1;  // 主播jid
+    optional string avatarUrl                    = 2;  // 用户头像
+    optional string nickName                     = 3;  // 用户昵称
+    //日榜/周榜数据
+    optional int32 dailyCharms                   = 4;  // 日魅力值
+    optional int32 weeklyCharms                  = 5;  // 周魅力值
+}
+
+//======================================================================================
+// 9.虚拟商品交易
+//======================================================================================
+// 请求
+message VPBDealRequest {
+    required ClientInfo clientInfo              = 1;  // 客户端信息
+    required DeviceInfo deviceInfo              = 2;  // 设备信息
+
+    required UserInfo userInfo                  = 3;  // 验证登陆
+
+    required string id                          = 4;  // 商品编号，视频聊天扣费中，客户端每次有效请求需自行创建一个随机编号；
+    required string targetJid                   = 5;  // 目标jid
+    optional int32 action 					    = 6;  // 1:视频扣费；2.购买表情包
+    optional int32 dealCounts                   = 7;  // 交易数量, 若>1 则购买多件，否则为1件
+}
+// 响应
+message VPBDealResponse {
+    required int32 status   				    = 1;  // 返回状态:1：成功;-1：错误;
+    optional AccountInfo accountInfo            = 2;
+}
