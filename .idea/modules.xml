@@ -2,11 +2,19 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://C:\project\TestRomtet\Proto.iml" filepath="C:\project\TestRomtet\Proto.iml" />
       <module fileurl="file://C:\project\TestRomtet\TestRemote.iml" filepath="C:\project\TestRomtet\TestRemote.iml" />
       <module fileurl="file://$PROJECT_DIR$/TestRomtet.iml" filepath="$PROJECT_DIR$/TestRomtet.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://C:\project\TestRomtet\app\app.iml" filepath="C:\project\TestRomtet\app\app.iml" />
+=======
+      <module fileurl="file://C:\project\TestRemote\Proto.iml" filepath="C:\project\TestRemote\Proto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestRemote.iml" filepath="$PROJECT_DIR$/TestRemote.iml" />
+      <module fileurl="file://C:\project\TestRemote\TestRemote.iml" filepath="C:\project\TestRemote\TestRemote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\project\TestRemote\app\app.iml" filepath="C:\project\TestRemote\app\app.iml" />
+>>>>>>> TestBranchTask
     </modules>
   </component>
 </project>
